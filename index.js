@@ -1,7 +1,7 @@
 const { Telegraf, Markup } = require("telegraf");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
+const ADMIN_ID = 562673622;
 bot.start((ctx) => {
   ctx.reply(
     "እንኳን ወደ Tsion Tasks Bot በደህና መጡ!",
