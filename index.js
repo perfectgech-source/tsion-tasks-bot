@@ -1,19 +1,29 @@
-const { Telegraf } = require("telegraf");
+const { Telegraf, Markup } = require("telegraf");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.start((ctx) => {
   ctx.reply(
-    `እንኳን ወደ Tsion Tasks Bot በደህና መጡ!
-
-👤 Profile
-📋 Tasks
-💰 Balance
-🎁 Referral
-💸 Withdraw`
+    "እንኳን ወደ Tsion Tasks Bot በደህና መጡ!",
+    Markup.keyboard([
+      ["📋 Tasks", "💰 Balance"],
+      ["🎁 Referral", "💸 Withdraw"],
+      ["👤 Profile", "📞 Support"]
+    ]).resize()
   );
 });
 
-bot.launch();
+bot.hears("💰 Balance", (ctx) => {
+  ctx.reply("Balance: 0 ETB");
+});
 
-console.log("Tsion Tasks Bot is running...");
+bot.hears("👤 Profile", (ctx) => {
+  ctx.reply(`ID: ${ctx.from.id}\nName: ${ctx.from.first_name}`);
+});
+
+bot.hears("📋 Tasks", (ctx) => {
+  ctx.reply("No tasks available yet.");
+});
+
+bot.launch();
+console.log("Bot running...");
