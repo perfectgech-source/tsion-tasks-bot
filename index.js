@@ -49,7 +49,9 @@ bot.hears("📋 Tasks", (ctx) => {
 
   ctx.reply(message);
 });
-});bot.command("admin", (ctx) => {
+});
+
+bot.command("admin", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) {
     return ctx.reply("Access denied");
   }
@@ -58,7 +60,7 @@ bot.hears("📋 Tasks", (ctx) => {
     "🔐 Admin Panel",
     Markup.keyboard([
       ["➕ Create Task"],
-      ["⏳ Pending Proofs"],
+      ["⏳ Pending Proofs"],n
       ["👥 Users"],
       ["📊 Statistics"]
     ]).resize()
