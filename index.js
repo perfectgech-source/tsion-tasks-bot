@@ -2,6 +2,7 @@ const { Telegraf, Markup } = require("telegraf");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ADMIN_ID = 562673622;
+let tasks = [];
 bot.start((ctx) => {
   ctx.reply(
     "እንኳን ወደ Tsion Tasks Bot በደህና መጡ!",
@@ -19,10 +20,20 @@ bot.hears("💰 Balance", (ctx) => {
 
 bot.hears("👤 Profile", (ctx) => {
   ctx.reply(`ID: ${ctx.from.id}\nName: ${ctx.from.first_name}`);
-});
 
 bot.hears("📋 Tasks", (ctx) => {
-  ctx.reply("No tasks available yet.");
+  if (tasks.length === 0) {
+    return ctx.reply("No tasks available yet.");
+  }
+
+  let message = "📋 Available Tasks\n\n";
+
+  tasks.forEach((task, index) => {
+    message += `${index + 1}. ${task.title}\n💰 ${task.reward} ETB\n\n`;
+  });
+
+  ctx.reply(message);
+});
 });bot.command("admin", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) {
     return ctx.reply("Access denied");
@@ -42,9 +53,13 @@ bot.hears("📋 Tasks", (ctx) => {
 bot.hears("➕ Create Task", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
-  ctx.reply("Task Created!\n\n📌 Test Task\n💰 Reward: 5 ETB");
-});
+  tasks.push({
+    title: "Join Telegram Channel",
+    reward: 5
+  });
 
+  ctx.reply("✅ Task created successfully");
+});
 bot.launch();
 const http = require("http");
 
