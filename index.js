@@ -7,6 +7,7 @@ const ADMIN_ID = 562673622;
 let tasks = [];
 let proofs = [];
 let balances = {};
+
 const REFERRAL_BONUS = 2.5;
 // START
 bot.start((ctx) => {
