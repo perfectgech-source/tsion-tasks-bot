@@ -3,6 +3,20 @@ const { Telegraf, Markup } = require("telegraf");
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ADMIN_ID = 562673622;
 let tasks = [];
+let proofs = [];
+bot.on("photo", (ctx) => {
+  proofs.push({
+    userId: ctx.from.id,
+    name: ctx.from.first_name
+  });
+
+  ctx.reply("✅ Proof submitted. Waiting for admin approval.");
+
+  bot.telegram.sendMessage(
+    ADMIN_ID,
+    `📸 New Proof\nUser: ${ctx.from.first_name}\nID: ${ctx.from.id}`
+  );
+});
 bot.start((ctx) => {
   ctx.reply(
     "እንኳን ወደ Tsion Tasks Bot በደህና መጡ!",
@@ -20,6 +34,7 @@ bot.hears("💰 Balance", (ctx) => {
 
 bot.hears("👤 Profile", (ctx) => {
   ctx.reply(`ID: ${ctx.from.id}\nName: ${ctx.from.first_name}`);
+});
 
 bot.hears("📋 Tasks", (ctx) => {
   if (tasks.length === 0) {
@@ -59,6 +74,11 @@ bot.hears("➕ Create Task", (ctx) => {
   });
 
   ctx.reply("✅ Task created successfully");
+});
+bot.hears("⏳ Pending Proofs", (ctx) => {
+  if (ctx.from.id !== ADMIN_ID) return;
+
+  ctx.reply(`Pending proofs: ${proofs.length}`);
 });
 bot.launch();
 const http = require("http");
