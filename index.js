@@ -143,11 +143,20 @@ bot.command("reject", (ctx) => {
 bot.hears("💸 Withdraw", (ctx) => {
   const balance = balances[ctx.from.id] || 0;
 
-  if (balance < 50) {
-    return ctx.reply("❌ Minimum withdrawal is 50 ETB");
+  if (balance < 1000) {
+    return ctx.reply("❌ Minimum withdrawal is 1000 ETB");
   }
 
-  ctx.reply("✅ Withdrawal request submitted.");
+  bot.telegram.sendMessage(
+    ADMIN_ID,
+    `💸 Withdrawal Request
+
+User: ${ctx.from.first_name}
+ID: ${ctx.from.id}
+Balance: ${balance} ETB`
+  );
+
+  ctx.reply("✅ Withdrawal request sent to admin.");
 });
 
 // SUPPORT
