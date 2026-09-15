@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
+const { Telegraf, Markup } = require("telegraf");
+const http = require("http");
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log(err));
-const { Telegraf, Markup } = require("telegraf");
-const http = require("http");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ADMIN_ID = 562673622;
+
 const userSchema = new mongoose.Schema({
   userId: String,
   balance: {
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
+
 let tasks = [];
 let proofs = [];
 let balances = {};
