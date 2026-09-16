@@ -116,15 +116,41 @@ bot.command("admin", (ctx) => {
 });
 
 // CREATE TASK
+let waitingForTask = false;
+
 bot.hears("➕ Create Task", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
-  tasks.push({
-    title: "Join Telegram Channel",
-    reward: 5
+  waitingForTask = true;
+
+  ctx.reply(
+    "Send task like:\nTask Title|Reward\n\nExample:\nJoin Telegram Channel|5"
+  );
+});
+
+bot.on("text", async (ctx, next) => {
+  if (!waitingForTask || ctx.from.id !== ADMIN_ID) {
+    return next();
+  }
+
+  if (ctx.message.text.startsWith("/")) {
+    return next();
+  }
+
+  const parts = ctx.message.text.split("|");
+
+  if (parts.length < 2) {
+    return ctx.reply("Format:\nTask Title|Reward");
+  }
+
+  await Task.create({
+    title: parts[0],
+    reward: Number(parts[1])
   });
 
-  ctx.reply("✅ Task created successfully");
+  waitingForTask = false;
+
+  ctx.reply("✅ Task Added Successfully");
 });
 
 // PENDING PROOFS
