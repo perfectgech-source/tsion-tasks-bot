@@ -33,6 +33,29 @@ let proofs = [];
 let balances = {};
 
 const REFERRAL_BONUS = 2.5;
+bot.command("addtask", async (ctx) => {
+  if (ctx.from.id !== ADMIN_ID) return;
+
+  const text = ctx.message.text.replace("/addtask ", "");
+
+  const parts = text.split("|");
+
+  if (parts.length < 2) {
+    return ctx.reply(
+      "Usage:\n/addtask Task Title|Reward"
+    );
+  }
+
+  const title = parts[0];
+  const reward = Number(parts[1]);
+
+  await Task.create({
+    title,
+    reward
+  });
+
+  ctx.reply("✅ Task Added");
+});
 // START
 bot.start((ctx) => {
   ctx.reply(
@@ -59,7 +82,9 @@ bot.hears("💰 Balance", (ctx) => {
 });
 
 // TASKS
-bot.hears("📋 Tasks", (ctx) => {
+bot.hears("📋 Tasks", async (ctx) => {
+  const tasks = await Task.find();
+
   if (tasks.length === 0) {
     return ctx.reply("No tasks available yet.");
   }
