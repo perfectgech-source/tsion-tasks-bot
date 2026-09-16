@@ -18,8 +18,17 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
+const taskSchema = new mongoose.Schema({
+  title: String,
+  reward: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-let tasks = [];
+const Task = mongoose.model("Task", taskSchema);
+
 let proofs = [];
 let balances = {};
 
