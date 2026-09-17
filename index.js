@@ -265,6 +265,8 @@ bot.hears("📊 Statistics", (ctx) => {
 
 // START BOT
 bot.launch();
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 // RENDER PORT
 const PORT = process.env.PORT || 10000;
