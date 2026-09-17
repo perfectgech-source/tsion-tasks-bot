@@ -237,10 +237,16 @@ bot.command("reject", (ctx) => {
 });
 
 // WITHDRAW
-bot.hears("💸 Withdraw", (ctx) => {
-  const balance = balances[ctx.from.id] || 0;
+bot.hears("💸 Withdraw", async (ctx) => {
+  let user = await User.findOne({
+    userId: ctx.from.id
+  });
 
-  if (balance < 1000) {
+  if (!user) {
+    return ctx.reply("❌ No account found");
+  }
+
+  if (user.balance < 1000) {
     return ctx.reply("❌ Minimum withdrawal is 1000 ETB");
   }
 
@@ -250,12 +256,11 @@ bot.hears("💸 Withdraw", (ctx) => {
 
 User: ${ctx.from.first_name}
 ID: ${ctx.from.id}
-Balance: ${balance} ETB`
+Balance: ${user.balance} ETB`
   );
 
   ctx.reply("✅ Withdrawal request sent to admin.");
 });
-
 // SUPPORT
 bot.hears("📞 Support", (ctx) => {
   ctx.reply("@onlineworktas");
