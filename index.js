@@ -76,9 +76,19 @@ bot.hears("👤 Profile", (ctx) => {
 });
 
 // BALANCE
-bot.hears("💰 Balance", (ctx) => {
-  const balance = balances[ctx.from.id] || 0;
-  ctx.reply(`💰 Balance: ${balance} ETB`);
+bot.hears("💰 Balance", async (ctx) => {
+  let user = await User.findOne({
+    userId: ctx.from.id
+  });
+
+  if (!user) {
+    user = await User.create({
+      userId: ctx.from.id,
+      balance: 0
+    });
+  }
+
+  ctx.reply(`💰 Balance: ${user.balance} ETB`);
 });
 
 // TASKS
@@ -195,6 +205,19 @@ bot.command("approve", (ctx) => {
 
   ctx.reply(`✅ Approved ${userId}`);
 });
+let user = await User.findOne({
+  userId: userId
+});
+
+if (!user) {
+  user = await User.create({
+    userId,
+    balance: 0
+  });
+}
+
+user.balance += 5;
+await user.save();
 
 // REJECT
 bot.command("reject", (ctx) => {
