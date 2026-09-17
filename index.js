@@ -186,7 +186,7 @@ bot.on("photo", (ctx) => {
 });
 
 // APPROVE
-bot.command("approve", (ctx) => {
+bot.command("approve", async (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
   const parts = ctx.message.text.split(" ");
@@ -196,7 +196,19 @@ bot.command("approve", (ctx) => {
     return ctx.reply("Usage: /approve USER_ID");
   }
 
-  balances[userId] = (balances[userId] || 0) + 5;
+  let user = await User.findOne({
+    userId: userId
+  });
+
+  if (!user) {
+    user = await User.create({
+      userId,
+      balance: 0
+    });
+  }
+
+  user.balance += 5;
+  await user.save();
 
   bot.telegram.sendMessage(
     userId,
@@ -205,20 +217,6 @@ bot.command("approve", (ctx) => {
 
   ctx.reply(`✅ Approved ${userId}`);
 });
-let user = await User.findOne({
-  userId: userId
-});
-
-if (!user) {
-  user = await User.create({
-    userId,
-    balance: 0
-  });
-}
-
-user.balance += 5;
-await user.save();
-
 // REJECT
 bot.command("reject", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
