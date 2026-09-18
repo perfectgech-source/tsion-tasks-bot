@@ -21,6 +21,7 @@ const User = mongoose.model("User", userSchema);
 const taskSchema = new mongoose.Schema({
   title: String,
   reward: Number,
+  link: String,
   createdAt: {
     type: Date,
     default: Date.now
@@ -89,7 +90,6 @@ bot.hears("💰 Balance", async (ctx) => {
 
   ctx.reply(`💰 Balance: ${user.balance} ETB`);
 });
-
 // TASKS
 bot.hears("📋 Tasks", async (ctx) => {
   const tasks = await Task.find();
@@ -183,6 +183,10 @@ bot.on("photo", (ctx) => {
     `📸 New Proof\nUser: ${ctx.from.first_name}\nID: ${ctx.from.id}\n\nApprove:\n/approve ${ctx.from.id}\n\nReject:\n/reject ${ctx.from.id}`
   );
 });
+    ADMIN_ID,
+    `📸 New Proof\nUser: ${ctx.from.first_name}\nID: ${ctx.from.id}\n\nApprove:\n/approve ${ctx.from.id}\n\nReject:\n/reject ${ctx.from.id}`
+  );
+});
 
 // APPROVE
 bot.command("approve", async (ctx) => {
@@ -272,12 +276,6 @@ bot.hears("🎁 Referral", (ctx) => {
   );
 });
 
-// USERS
-bot.hears("👥 Users", (ctx) => {
-  if (ctx.from.id !== ADMIN_ID) return;
-
-  ctx.reply(`Users with balances: ${Object.keys(balances).length}`);
-});
 
 // STATS
 bot.hears("📊 Statistics", async (ctx) => {
