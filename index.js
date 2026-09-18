@@ -296,11 +296,16 @@ bot.hears("📊 Statistics", async (ctx) => {
   );
 });
 
+
 // START BOT
+bot.telegram.deleteWebhook()
+  .then(() => console.log("Webhook deleted"))
+  .catch(console.error);
+
 bot.launch();
+
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
-
 // RENDER PORT
 const PORT = process.env.PORT || 10000;
 
