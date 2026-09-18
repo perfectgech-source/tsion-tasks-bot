@@ -40,21 +40,16 @@ bot.command("addtask", async (ctx) => {
 
   const parts = text.split("|");
 
-  if (parts.length < 2) {
-    return ctx.reply(
-      "Usage:\n/addtask Task Title|Reward"
-    );
-  }
+  if (parts.length < 3) {
+  return ctx.reply(
+    "Usage:\n/addtask Task Title|Reward|Link"
+  );
+}
 
-  const title = parts[0];
-  const reward = Number(parts[1]);
-
-  await Task.create({
-    title,
-    reward
-  });
-
-  ctx.reply("✅ Task Added");
+await Task.create({
+  title: parts[0],
+  reward: Number(parts[1]),
+  link: parts[2]
 });
 // START
 bot.start((ctx) => {
@@ -98,13 +93,14 @@ bot.hears("📋 Tasks", async (ctx) => {
     return ctx.reply("No tasks available yet.");
   }
 
-  let message = "📋 Available Tasks\n\n";
-
-  tasks.forEach((task, index) => {
-    message += `${index + 1}. ${task.title}\n💰 Reward: ${task.reward} ETB\n\n`;
-  });
-
-  ctx.reply(message);
+  for (const task of tasks) {
+    await ctx.reply(
+      `📋 ${task.title}\n\n💰 Reward: ${task.reward} ETB`,
+      Markup.inlineKeyboard([
+        [Markup.button.url("🔗 Open Task", task.link)]
+      ])
+    );
+  }
 });
 
 // ADMIN PANEL
@@ -179,10 +175,6 @@ bot.on("photo", (ctx) => {
   ctx.reply("✅ Proof submitted. Waiting for admin approval.");
 
   bot.telegram.sendMessage(
-    ADMIN_ID,
-    `📸 New Proof\nUser: ${ctx.from.first_name}\nID: ${ctx.from.id}\n\nApprove:\n/approve ${ctx.from.id}\n\nReject:\n/reject ${ctx.from.id}`
-  );
-});
     ADMIN_ID,
     `📸 New Proof\nUser: ${ctx.from.first_name}\nID: ${ctx.from.id}\n\nApprove:\n/approve ${ctx.from.id}\n\nReject:\n/reject ${ctx.from.id}`
   );
