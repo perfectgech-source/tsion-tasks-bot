@@ -40,16 +40,25 @@ bot.command("addtask", async (ctx) => {
 
   const parts = text.split("|");
 
-  if (parts.length < 3) {
-  return ctx.reply(
-    "Usage:\n/addtask Task Title|Reward|Link"
-  );
-}
+  bot.command("addtask", async (ctx) => {
+  if (ctx.from.id !== ADMIN_ID) return;
 
-await Task.create({
-  title: parts[0],
-  reward: Number(parts[1]),
-  link: parts[2]
+  const text = ctx.message.text.replace("/addtask ", "");
+  const parts = text.split("|");
+
+  if (parts.length < 3) {
+    return ctx.reply(
+      "Usage:\n/addtask Task Title|Reward|Link"
+    );
+  }
+
+  await Task.create({
+    title: parts[0],
+    reward: Number(parts[1]),
+    link: parts[2]
+  });
+
+  ctx.reply("✅ Task Added");
 });
 // START
 bot.start((ctx) => {
@@ -129,7 +138,11 @@ bot.hears("➕ Create Task", (ctx) => {
   waitingForTask = true;
 
   ctx.reply(
-    "Send task like:\nTask Title|Reward\n\nExample:\nJoin Telegram Channel|5"
+    Send task like:
+Task Title|Reward|Link
+
+Example:
+Join Telegram Channel|5|https://t.me/mychannel
   );
 });
 
@@ -144,14 +157,15 @@ bot.on("text", async (ctx, next) => {
 
   const parts = ctx.message.text.split("|");
 
-  if (parts.length < 2) {
+  if (parts.length < 3) {
     return ctx.reply("Format:\nTask Title|Reward");
   }
 
   await Task.create({
-    title: parts[0],
-    reward: Number(parts[1])
-  });
+  title: parts[0],
+  reward: Number(parts[1]),
+  link: parts[2]
+});
 
   waitingForTask = false;
 
