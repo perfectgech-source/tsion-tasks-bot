@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+gconst mongoose = require("mongoose");
 const { Telegraf, Markup } = require("telegraf");
 const http = require("http");
 
@@ -281,11 +281,18 @@ bot.hears("👥 Users", (ctx) => {
 });
 
 // STATS
-bot.hears("📊 Statistics", (ctx) => {
+bot.hears("📊 Statistics", async (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
+  const taskCount = await Task.countDocuments();
+  const userCount = await User.countDocuments();
+
   ctx.reply(
-    `📊 Stats\nTasks: ${tasks.length}\nProofs: ${proofs.length}`
+    `📊 Stats
+
+👥 Users: ${userCount}
+📋 Tasks: ${taskCount}
+📸 Proofs: ${proofs.length}`
   );
 });
 
