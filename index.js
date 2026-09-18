@@ -89,28 +89,33 @@ bot.hears("💰 Balance", async (ctx) => {
 });
 // TASKS
 bot.hears("📋 Tasks", async (ctx) => {
-  const tasks = await Task.find();
+  try {
+    const tasks = await Task.find();
 
-  if (tasks.length === 0) {
-    return ctx.reply("No tasks available yet.");
-  }
+    console.log("Tasks:", tasks);
 
-  for (const task of tasks) {
-    await ctx.reply(
-      `📋 ${task.title}\n\n💰 Reward: ${task.reward} ETB`,
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "🔗 Open Task",
-                url: task.link
-              }
-            ]
-          ]
-        }
+    if (tasks.length === 0) {
+      return ctx.reply("No tasks available yet.");
+    }
+
+    for (const task of tasks) {
+      if (!task.link) {
+        await ctx.reply(
+          `📋 ${task.title}\n💰 Reward: ${task.reward} ETB`
+        );
+        continue;
       }
-    );
+
+      await ctx.reply(
+        `📋 ${task.title}\n\n💰 Reward: ${task.reward} ETB`,
+        Markup.inlineKeyboard([
+          [Markup.button.url("🔗 Open Task", task.link)]
+        ])
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    ctx.reply("❌ Error loading tasks");
   }
 });
 bot.hears("📋 Tasks", async (ctx) => {
