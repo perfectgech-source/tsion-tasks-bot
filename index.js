@@ -129,9 +129,11 @@ bot.hears("➕ Create Task", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
   waitingForTask = true;
-ctx.reply(
-  "Send task like:\n\nTask Title|Reward|Link\n\nExample:\nJoin Telegram Channel|5|https://t.me/mychannel"
-);
+
+  ctx.reply(
+    "Send task like:\n\nTask Title|Reward|Link\n\nExample:\nJoin Telegram Channel|5|https://t.me/mychannel"
+  );
+});
 
 bot.on("text", async (ctx, next) => {
   if (!waitingForTask || ctx.from.id !== ADMIN_ID) {
