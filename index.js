@@ -241,6 +241,30 @@ bot.command("approve", async (ctx) => {
 
   ctx.reply(`✅ Approved ${userId}`);
 });
+// DELETE TASK
+bot.command("deletetask", async (ctx) => {
+  if (ctx.from.id !== ADMIN_ID) return;
+
+  const parts = ctx.message.text.split(" ");
+  const taskId = parts[1];
+
+  if (!taskId) {
+    return ctx.reply("Usage: /deletetask TASK_ID");
+  }
+
+  const task = await Task.findByIdAndDelete(taskId);
+
+  if (!task) {
+    return ctx.reply("❌ Task not found");
+  }
+
+  ctx.reply("🗑️ Task Deleted");
+});
+
+// REJECT
+bot.command("reject", (ctx) => {
+ ...
+});
 // REJECT
 bot.command("reject", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
