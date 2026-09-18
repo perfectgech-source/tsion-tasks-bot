@@ -1,4 +1,4 @@
-gconst mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const { Telegraf, Markup } = require("telegraf");
 const http = require("http");
 
