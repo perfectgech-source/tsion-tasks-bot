@@ -37,13 +37,6 @@ bot.command("addtask", async (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
   const text = ctx.message.text.replace("/addtask ", "");
-
-  const parts = text.split("|");
-
-  bot.command("addtask", async (ctx) => {
-  if (ctx.from.id !== ADMIN_ID) return;
-
-  const text = ctx.message.text.replace("/addtask ", "");
   const parts = text.split("|");
 
   if (parts.length < 3) {
@@ -136,15 +129,9 @@ bot.hears("➕ Create Task", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
   waitingForTask = true;
-
-  ctx.reply(
-    Send task like:
-Task Title|Reward|Link
-
-Example:
-Join Telegram Channel|5|https://t.me/mychannel
-  );
-});
+ctx.reply(
+  "Send task like:\n\nTask Title|Reward|Link\n\nExample:\nJoin Telegram Channel|5|https://t.me/mychannel"
+);
 
 bot.on("text", async (ctx, next) => {
   if (!waitingForTask || ctx.from.id !== ADMIN_ID) {
@@ -158,9 +145,8 @@ bot.on("text", async (ctx, next) => {
   const parts = ctx.message.text.split("|");
 
   if (parts.length < 3) {
-    return ctx.reply("Format:\nTask Title|Reward");
-  }
-
+  return ctx.reply("Format:\nTask Title|Reward|Link");
+}
   await Task.create({
   title: parts[0],
   reward: Number(parts[1]),
