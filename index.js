@@ -113,6 +113,19 @@ bot.hears("📋 Tasks", async (ctx) => {
     );
   }
 });
+bot.hears("📋 Tasks", async (ctx) => {
+  console.log("Tasks button clicked");
+
+  const tasks = await Task.find();
+
+  console.log("Tasks found:", tasks.length);
+
+  if (tasks.length === 0) {
+    return ctx.reply("No tasks available yet.");
+  }
+
+  // ...
+});
 
 // ADMIN PANEL
 bot.command("admin", (ctx) => {
