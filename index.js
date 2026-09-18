@@ -30,7 +30,6 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model("Task", taskSchema);
 
 let proofs = [];
-let balances = {};
 
 const REFERRAL_BONUS = 2.5;
 bot.command("addtask", async (ctx) => {
