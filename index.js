@@ -263,10 +263,6 @@ bot.command("deletetask", async (ctx) => {
 
 // REJECT
 bot.command("reject", (ctx) => {
- ...
-});
-// REJECT
-bot.command("reject", (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
 
   const parts = ctx.message.text.split(" ");
