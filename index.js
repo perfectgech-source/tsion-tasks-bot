@@ -101,13 +101,13 @@ bot.hears("📋 Tasks", async (ctx) => {
     for (const task of tasks) {
       if (!task.link) {
         await ctx.reply(
-          `📋 ${task.title}\n💰 Reward: ${task.reward} ETB`
+          `📋 ${task.title}\n🆔 ${task._id}\n💰 Reward: ${task.reward} ETB`
         );
         continue;
       }
 
       await ctx.reply(
-        `📋 ${task.title}\n\n💰 Reward: ${task.reward} ETB`,
+       `📋 ${task.title}\n🆔 ${task._id}\n\n💰 Reward: ${task.reward} ETB`,
         Markup.inlineKeyboard([
           [Markup.button.url("🔗 Open Task", task.link)]
         ])
@@ -297,7 +297,30 @@ bot.hears("🎁 Referral", (ctx) => {
   );
 });
 
+// DELETE TASK
+bot.command("deletetask", async (ctx) => {
+  if (ctx.from.id !== ADMIN_ID) return;
 
+  const id = ctx.message.text.split(" ")[1];
+
+  if (!id) {
+    const tasks = await Task.find();
+
+    let msg = "📋 Task IDs:\n\n";
+
+    tasks.forEach(task => {
+      msg += `${task._id} - ${task.title}\n`;
+    });
+
+    return ctx.reply(
+      msg + "\nDelete:\n/deletetask TASK_ID"
+    );
+  }
+
+  await Task.findByIdAndDelete(id);
+
+  ctx.reply("🗑 Task Deleted");
+});
 // STATS
 bot.hears("📊 Statistics", async (ctx) => {
   if (ctx.from.id !== ADMIN_ID) return;
